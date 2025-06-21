@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Since We Have Met</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Dancing+Script:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Playfair Display', serif;
+            background: linear-gradient(135deg, #ffeef8 0%, #fff5f5 50%, #fef7e8 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(255, 192, 203, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 218, 185, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(255, 215, 0, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #8b4d6b;
+            margin-bottom: 3rem;
+            text-shadow: 2px 2px 4px rgba(139, 77, 107, 0.1);
+            animation: titleGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            from { text-shadow: 2px 2px 4px rgba(139, 77, 107, 0.1); }
+            to { text-shadow: 2px 2px 8px rgba(139, 77, 107, 0.3); }
+        }
+
+        .heart-container {
+            position: relative;
+            margin: 2rem auto 3rem;
+            width: 350px;
+            height: 350px;
+            animation: heartFloat 4s ease-in-out infinite;
+            perspective: 1000px;
+        }
+
+        @keyframes heartFloat {
+            0%, 100% { transform: translateY(0px) rotateY(0deg); }
+            50% { transform: translateY(-10px) rotateY(5deg); }
+        }
+
+        .heart {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 110px;
+            background: linear-gradient(135deg, 
+                rgba(255, 20, 147, 0.9) 0%,
+                rgba(255, 105, 180, 0.8) 30%,
+                rgba(186, 85, 211, 0.7) 60%,
+                rgba(138, 43, 226, 0.8) 100%);
+            border-radius: 60px 60px 0 0;
+            transform-origin: 50% 100%;
+            box-shadow: 
+                0 0 30px rgba(255, 20, 147, 0.6),
+                inset 0 0 20px rgba(255, 255, 255, 0.3),
+                0 0 60px rgba(186, 85, 211, 0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: heartGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes heartGlow {
+            0% { 
+                box-shadow: 
+                    0 0 30px rgba(255, 20, 147, 0.6),
+                    inset 0 0 20px rgba(255, 255, 255, 0.3),
+                    0 0 60px rgba(186, 85, 211, 0.4);
+            }
+            100% { 
+                box-shadow: 
+                    0 0 40px rgba(255, 20, 147, 0.8),
+                    inset 0 0 30px rgba(255, 255, 255, 0.4),
+                    0 0 80px rgba(186, 85, 211, 0.6);
+            }
+        }
+
+        .heart::before,
+        .heart::after {
+            content: '';
+            position: absolute;
+            width: 120px;
+            height: 110px;
+            background: inherit;
+            border-radius: 60px 60px 0 0;
+            box-shadow: inherit;
+            border: inherit;
+        }
+
+        .heart::before {
+            left: -60px;
+            transform: rotate(-45deg);
+            transform-origin: 100% 100%;
+        }
+
+        .heart::after {
+            left: 60px;
+            transform: rotate(45deg);
+            transform-origin: 0% 100%;
+        }
+
+        .orbital-ring {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            border: 2px solid transparent;
+            border-radius: 50%;
+            animation: rotate 8s linear infinite;
+        }
+
+        .orbital-ring-1 {
+            width: 250px;
+            height: 180px;
+            margin: -90px 0 0 -125px;
+            border-color: rgba(0, 255, 255, 0.6);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+            animation-duration: 6s;
+        }
+
+        .orbital-ring-2 {
+            width: 300px;
+            height: 200px;
+            margin: -100px 0 0 -150px;
+            border-color: rgba(255, 105, 180, 0.5);
+            box-shadow: 0 0 15px rgba(255, 105, 180, 0.3);
+            animation-duration: 10s;
+            animation-direction: reverse;
+        }
+
+        .orbital-ring-3 {
+            width: 200px;
+            height: 140px;
+            margin: -70px 0 0 -100px;
+            border-color: rgba(186, 85, 211, 0.4);
+            box-shadow: 0 0 10px rgba(186, 85, 211, 0.3);
+            animation-duration: 4s;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotateZ(0deg) rotateX(60deg); }
+            100% { transform: rotateZ(360deg) rotateX(60deg); }
+        }
+
+        .orbital-particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #00ffff, #0080ff);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+        }
+
+        .particle-1 {
+            top: 50%;
+            left: 10px;
+            margin-top: -4px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .particle-2 {
+            top: 20%;
+            right: 30px;
+            background: radial-gradient(circle, #ff69b4, #ff1493);
+            box-shadow: 0 0 10px rgba(255, 105, 180, 0.8);
+            animation: pulse 2s ease-in-out infinite 0.5s;
+        }
+
+        .particle-3 {
+            bottom: 30%;
+            left: 20px;
+            background: radial-gradient(circle, #ba55d3, #8a2be2);
+            box-shadow: 0 0 8px rgba(186, 85, 211, 0.8);
+            animation: pulse 2s ease-in-out infinite 1s;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.7; }
+        }
+
+        .timer-display {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(15px);
+            padding: 15px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            min-width: 160px;
+            z-index: 10;
+        }
+
+        .timer-row {
+            margin: 5px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .timer-number {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .timer-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            color: #fff;
+        }
+
+        .message {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: #b8860b;
+            margin-top: 2rem;
+            text-shadow: 1px 1px 2px rgba(184, 134, 11, 0.2);
+            animation: messageFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes messageFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .sparkles {
+            position: fixed;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .sparkle {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: radial-gradient(circle, #ffd700, #ffb347);
+            border-radius: 50%;
+            animation: sparkle 3s linear infinite;
+        }
+
+        @keyframes sparkle {
+            0% { opacity: 0; transform: translateY(100vh) rotate(0deg); }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { opacity: 0; transform: translateY(-10px) rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.5rem;
+                margin-bottom: 2rem;
+            }
+
+            .heart-container {
+                width: 250px;
+                height: 230px;
+                margin: 1.5rem auto 2rem;
+            }
+
+            .timer-display {
+                font-size: 0.9rem;
+                padding: 12px;
+                min-width: 160px;
+            }
+
+            .timer-number {
+                font-size: 1.1rem;
+            }
+
+            .timer-label {
+                font-size: 0.8rem;
+            }
+
+            .message {
+                font-size: 1.8rem;
+                margin-top: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .title {
+                font-size: 2rem;
+            }
+
+            .heart-container {
+                width: 200px;
+                height: 180px;
+            }
+
+            .timer-display {
+                font-size: 0.8rem;
+                padding: 10px;
+                min-width: 140px;
+            }
+
+            .timer-number {
+                font-size: 1rem;
+            }
+
+            .message {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="sparkles" id="sparkles"></div>
+    
+    <div class="container">
+        <h1 class="title">Time Since We Have Met</h1>
+        
+        <div class="heart-container">
+            <div class="orbital-ring orbital-ring-1">
+                <div class="orbital-particle particle-1"></div>
+            </div>
+            <div class="orbital-ring orbital-ring-2">
+                <div class="orbital-particle particle-2"></div>
+            </div>
+            <div class="orbital-ring orbital-ring-3">
+                <div class="orbital-particle particle-3"></div>
+            </div>
+            <div class="heart"></div>
+            <div class="timer-display" id="timer">
+                <div class="timer-row">
+                    <span class="timer-label">Years:</span>
+                    <span class="timer-number" id="years">0</span>
+                </div>
+                <div class="timer-row">
+                    <span class="timer-label">Months:</span>
+                    <span class="timer-number" id="months">0</span>
+                </div>
+                <div class="timer-row">
+                    <span class="timer-label">Days:</span>
+                    <span class="timer-number" id="days">0</span>
+                </div>
+                <div class="timer-row">
+                    <span class="timer-label">Hours:</span>
+                    <span class="timer-number" id="hours">0</span>
+                </div>
+                <div class="timer-row">
+                    <span class="timer-label">Minutes:</span>
+                    <span class="timer-number" id="minutes">0</span>
+                </div>
+                <div class="timer-row">
+                    <span class="timer-label">Seconds:</span>
+                    <span class="timer-number" id="seconds">0</span>
+                </div>
+            </div>
+        </div>
+        
+        <p class="message">Forever cherishing every second together.</p>
+    </div>
+
+    <script>
+        // Target date: November 30, 2024
+        const startDate = new Date('2024-11-30T00:00:00');
+        
+        function updateTimer() {
+            const now = new Date();
+            const difference = now - startDate;
+            
+            if (difference > 0) {
+                // Calculate years
+                const years = Math.floor(difference / (1000 * 60 * 60 * 24 * 365.25));
+                const remainingAfterYears = difference % (1000 * 60 * 60 * 24 * 365.25);
+                
+                // Calculate months (approximate)
+                const months = Math.floor(remainingAfterYears / (1000 * 60 * 60 * 24 * 30.44));
+                const remainingAfterMonths = remainingAfterYears % (1000 * 60 * 60 * 24 * 30.44);
+                
+                // Calculate days
+                const days = Math.floor(remainingAfterMonths / (1000 * 60 * 60 * 24));
+                const remainingAfterDays = remainingAfterMonths % (1000 * 60 * 60 * 24);
+                
+                // Calculate hours
+                const hours = Math.floor(remainingAfterDays / (1000 * 60 * 60));
+                const remainingAfterHours = remainingAfterDays % (1000 * 60 * 60);
+                
+                // Calculate minutes
+                const minutes = Math.floor(remainingAfterHours / (1000 * 60));
+                
+                // Calculate seconds
+                const seconds = Math.floor((remainingAfterHours % (1000 * 60)) / 1000);
+                
+                document.getElementById('years').textContent = years;
+                document.getElementById('months').textContent = months;
+                document.getElementById('days').textContent = days;
+                document.getElementById('hours').textContent = hours;
+                document.getElementById('minutes').textContent = minutes;
+                document.getElementById('seconds').textContent = seconds;
+            }
+        }
+        
+        // Update timer every second
+        updateTimer();
+        setInterval(updateTimer, 1000);
+        
+        // Create floating sparkles
+        function createSparkle() {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.style.left = Math.random() * 100 + 'vw';
+            sparkle.style.animationDelay = Math.random() * 3 + 's';
+            sparkle.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            document.getElementById('sparkles').appendChild(sparkle);
+            
+            // Remove sparkle after animation
+            setTimeout(() => {
+                sparkle.remove();
+            }, 5000);
+        }
+        
+        // Create sparkles periodically
+        setInterval(createSparkle, 500);
+        
+        // Initial sparkles
+        for (let i = 0; i < 10; i++) {
+            setTimeout(createSparkle, i * 100);
+        }
+    </script>
+</body>
+</html>
